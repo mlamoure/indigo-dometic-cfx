@@ -174,3 +174,7 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+
+# Indigo installs runtime packages here; never commit it (the packager strips it too).
+Dometic CFX.indigoPlugin/Contents/Packages*
+Dometic CFX.indigoPlugin/Contents/Resources/Packages*

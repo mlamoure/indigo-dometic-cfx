@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<Devices>
+    <Device type="thermostat" id="cfxCooler">
+        <Name>Dometic CFX5 Cooler</Name>
+        <ConfigUI>
+            <Field id="coolerId" type="menu">
+                <Label>Cooler:</Label>
+                <List class="self" method="get_cooler_list" dynamicReload="true"/>
+            </Field>
+            <Field id="refreshCoolers" type="button">
+                <Label/>
+                <Title>Discover Coolers</Title>
+                <CallbackMethod>refresh_cooler_list</CallbackMethod>
+            </Field>
+            <Field id="host" type="textfield"
+                   tooltip="IP address or hostname of the cooler. Filled in automatically when a discovered cooler is selected; edit it if the cooler has a fixed address.">
+                <Label>Address:</Label>
+            </Field>
+            <Field id="port" type="textfield" defaultValue="13143">
+                <Label>Port:</Label>
+            </Field>
+            <Field id="unit" type="menu" defaultValue="F">
+                <Label>Temperature unit:</Label>
+                <List>
+                    <Option value="F">Fahrenheit</Option>
+                    <Option value="C">Celsius</Option>
+                </List>
+            </Field>
+            <Field id="compartment" type="menu" defaultValue="0"
+                   tooltip="Single-zone coolers have one compartment. On a dual-zone cooler create one device per compartment.">
+                <Label>Compartment:</Label>
+                <List>
+                    <Option value="0">First (single zone)</Option>
+                    <Option value="1">Second (dual zone only)</Option>
+                </List>
+            </Field>
+            <Field id="coolerName" type="textfield" hidden="true">
+                <Label/>
+            </Field>
+            <!-- Thermostat capability properties (see the Indigo SDK thermostat example). -->
+            <Field id="NumTemperatureInputs" type="textfield" defaultValue="1" hidden="true"><Label/></Field>
+            <Field id="NumHumidityInputs" type="textfield" defaultValue="0" hidden="true"><Label/></Field>
+            <Field id="SupportsCoolSetpoint" type="checkbox" defaultValue="true" hidden="true"><Label/></Field>
+            <Field id="SupportsHeatSetpoint" type="checkbox" defaultValue="false" hidden="true"><Label/></Field>
+            <Field id="SupportsHvacOperationMode" type="checkbox" defaultValue="true" hidden="true"><Label/></Field>
+            <Field id="SupportsHvacFanMode" type="checkbox" defaultValue="false" hidden="true"><Label/></Field>
+            <Field id="ShowCoolHeatEquipmentStateUI" type="checkbox" defaultValue="true" hidden="true"><Label/></Field>
+            <Field id="SupportsStatusRequest" type="checkbox" defaultValue="true" hidden="true"><Label/></Field>
+        </ConfigUI>
+        <States>
+            <State id="connected">
+                <ValueType boolType="YesNo">Boolean</ValueType>
+                <TriggerLabel>Connected</TriggerLabel>
+                <ControlPageLabel>Connected</ControlPageLabel>
+            </State>
+            <State id="coolerPowerOn">
+                <ValueType boolType="OnOff">Boolean</ValueType>
+                <TriggerLabel>Cooler Power</TriggerLabel>
+                <ControlPageLabel>Cooler Power</ControlPageLabel>
+            </State>
+            <State id="compartmentPowerOn">
+                <ValueType boolType="OnOff">Boolean</ValueType>
+                <TriggerLabel>Compartment Power</TriggerLabel>
+                <ControlPageLabel>Compartment Power</ControlPageLabel>
+            </State>
+            <State id="compressorOn">
+                <ValueType boolType="OnOff">Boolean</ValueType>
+                <TriggerLabel>Compressor Running</TriggerLabel>
+                <ControlPageLabel>Compressor Running</ControlPageLabel>
+            </State>
+            <State id="doorOpen">
+                <ValueType boolType="YesNo">Boolean</ValueType>
+                <TriggerLabel>Door Open</TriggerLabel>
+                <ControlPageLabel>Door Open</ControlPageLabel>
+            </State>
+            <State id="voltage">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>Supply Voltage (V)</TriggerLabel>
+                <ControlPageLabel>Supply Voltage</ControlPageLabel>
+            </State>
+            <State id="current">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>Current Draw (A)</TriggerLabel>
+                <ControlPageLabel>Current Draw</ControlPageLabel>
+            </State>
+            <State id="powerSource">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Power Source (AC/DC)</TriggerLabel>
+                <ControlPageLabel>Power Source</ControlPageLabel>
+            </State>
+            <State id="batteryProtection">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Battery Protection (Low/Medium/High)</TriggerLabel>
+                <ControlPageLabel>Battery Protection</ControlPageLabel>
+            </State>
+            <State id="iceMakerOn">
+                <ValueType boolType="OnOff">Boolean</ValueType>
+                <TriggerLabel>Ice Maker</TriggerLabel>
+                <ControlPageLabel>Ice Maker</ControlPageLabel>
+            </State>
+            <State id="errorCodes">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Error Codes</TriggerLabel>
+                <ControlPageLabel>Error Codes</ControlPageLabel>
+            </State>
+            <State id="errorText">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Error Text</TriggerLabel>
+                <ControlPageLabel>Error Text</ControlPageLabel>
+            </State>
+            <State id="hasError">
+                <ValueType boolType="YesNo">Boolean</ValueType>
+                <TriggerLabel>Has Error</TriggerLabel>
+                <ControlPageLabel>Has Error</ControlPageLabel>
+            </State>
+            <State id="setpointMin">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>Set-point Minimum</TriggerLabel>
+                <ControlPageLabel>Set-point Minimum</ControlPageLabel>
+            </State>
+            <State id="setpointMax">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>Set-point Maximum</TriggerLabel>
+                <ControlPageLabel>Set-point Maximum</ControlPageLabel>
+            </State>
+            <State id="productName">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Product Name</TriggerLabel>
+                <ControlPageLabel>Product Name</ControlPageLabel>
+            </State>
+            <State id="serialNumber">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Serial Number</TriggerLabel>
+                <ControlPageLabel>Serial Number</ControlPageLabel>
+            </State>
+            <State id="firmwareVersion">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Firmware Version</TriggerLabel>
+                <ControlPageLabel>Firmware Version</ControlPageLabel>
+            </State>
+            <State id="lastUpdate">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Last Update</TriggerLabel>
+                <ControlPageLabel>Last Update</ControlPageLabel>
+            </State>
+        </States>
+        <UiDisplayStateId>temperatureInput1</UiDisplayStateId>
+    </Device>
+</Devices>

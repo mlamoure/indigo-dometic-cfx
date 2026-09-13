@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<PluginConfig>
+    <Field id="infoLabel" type="label">
+        <Label>Controls Dometic CFX5 coolers over the local Wi-Fi network (no cloud, no Bluetooth). Each cooler is an Indigo thermostat-type device: the cool set-point is the cooler's set-point, "Cool" mode is compartment power on and "Off" is off, and the cooling indicator follows the compressor. The cooler must already be joined to your Wi-Fi. A DHCP reservation for the cooler is recommended; the plugin also re-finds a cooler by its id via mDNS when its address changes.</Label>
+    </Field>
+
+    <Field id="connectTimeout" type="textfield" defaultValue="5"
+           tooltip="Seconds to wait for a TCP connection before treating the cooler as unreachable (2-30). Coolers that are switched off simply time out.">
+        <Label>Connect timeout (seconds):</Label>
+    </Field>
+
+    <Field id="separator1" type="separator"/>
+
+    <Field id="log_level" type="menu" defaultValue="20">
+        <Label>Event Logging Level:</Label>
+        <List>
+            <Option value="5">Extra Debugging Messages</Option>
+            <Option value="10">Debugging Messages</Option>
+            <Option value="20">Informational Messages</Option>
+            <Option value="30">Warning Messages</Option>
+            <Option value="40">Error Messages</Option>
+            <Option value="50">Critical Errors Only</Option>
+        </List>
+    </Field>
+</PluginConfig>
