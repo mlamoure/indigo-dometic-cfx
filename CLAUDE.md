@@ -23,7 +23,7 @@ once (the deploy script only updates files).
 ```
 Dometic CFX.indigoPlugin/Contents/
   Info.plist                      # PluginVersion CalVer, id com.vtmikel.dometiccfx, ServerApiVersion 3.6
-  Resources/icon.png
+  Resources/icon.png              # rendered by scripts/make_icon.py (512x512); regenerate, never hand-edit
   Server Plugin/
     plugin.py                     # thin Indigo adapter: lifecycle, ConfigUIs, actions, menus, runConcurrentThread, _apply_outcome
     Devices.xml                   # one thermostat-type device "cfxCooler"; capability props are hidden ConfigUI fields
@@ -35,7 +35,7 @@ Dometic CFX.indigoPlugin/Contents/
     ddmp/                         # VENDORED copy of mike/dometic-ddmp (see VENDORED_DDMP_VERSION); never edit here
     VENDORED_DDMP_VERSION
 tests/                            # conftest stubs `indigo`; FakeClient replays tests/fixtures/capture-2026-09-13.b64
-scripts/sync_ddmp.sh
+scripts/sync_ddmp.sh · scripts/make_icon.py
 ```
 
 ## Invariants
