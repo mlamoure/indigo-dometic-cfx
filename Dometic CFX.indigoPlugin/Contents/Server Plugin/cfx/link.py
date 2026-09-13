@@ -231,7 +231,10 @@ class CoolerLink:
 
     def _resolve(self, outcome: LinkOutcome) -> None:
         try:
-            found = self._resolver(self.config.cooler_id, timeout=3.0)
+            # also probe the last known address directly: cheaper and works without mDNS
+            found = self._resolver(
+                self.config.cooler_id, timeout=3.0, hosts=[self.config.host]
+            )
         except Exception as exc:  # discovery must never kill the loop
             outcome.messages.append((logging.DEBUG, f"re-discovery failed: {exc}"))
             return

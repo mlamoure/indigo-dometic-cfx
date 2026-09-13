@@ -106,5 +106,5 @@ allow the Indigo host to reach it.
 ```bash
 python3 -m venv .venv && source .venv/bin/activate.fish && pip install -r requirements.txt
 black . && ruff check --select E9,F . && python -m pytest
-scripts/sync_ddmp.sh ../dometic-ddmp v0.1.1     # refresh the vendored library
+scripts/sync_ddmp.sh ../dometic-ddmp v0.1.2     # refresh the vendored library
 ```

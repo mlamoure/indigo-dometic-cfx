@@ -51,7 +51,7 @@ from .protocol import (
 from .session import Event, Nak, Publish, Session, Unhandled, WriteExpectation
 from .sync_client import SyncClient
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 __all__ = [
     "DEFAULT_PORT",

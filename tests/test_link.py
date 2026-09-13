@@ -96,6 +96,7 @@ def test_re_resolves_address_after_repeated_failures():
 
     def resolver(cooler_id, **kw):
         calls.append(cooler_id)
+        assert list(kw["hosts"]) == ["10.66.40.129"]  # last known address is probed too
         return Discovered(
             cooler_id, "MC1_34f12c", "MC1_34f12c.local", "10.66.40.77", 13143
         )

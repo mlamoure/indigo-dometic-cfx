@@ -164,14 +164,18 @@ def _parse_txt(rdata: bytes) -> dict[str, str]:
 
 
 def build_query(
-    service: str = SERVICE_TYPE, *, unicast_response: bool = False
+    service: str = SERVICE_TYPE,
+    *,
+    unicast_response: bool = False,
+    questions: Sequence[tuple[str, int]] | None = None,
 ) -> bytes:
+    """A DNS query; by default one PTR question for ``service``, else ``(name, type)`` pairs."""
     qclass = 1 | (0x8000 if unicast_response else 0)
-    return (
-        struct.pack(">HHHHHH", 0, 0, 1, 0, 0, 0)
-        + _encode_name(service)
-        + struct.pack(">HH", 12, qclass)
-    )
+    qs = list(questions) if questions else [(service, 12)]
+    out = struct.pack(">HHHHHH", 0, 0, len(qs), 0, 0, 0)
+    for name, qtype in qs:
+        out += _encode_name(name) + struct.pack(">HH", qtype, qclass)
+    return out
 
 
 def parse_response(data: bytes) -> list[tuple[str, int, bytes, int]]:
@@ -244,6 +248,25 @@ class _MdnsCollector:
             )
         return out
 
+    def missing(self) -> list[tuple[str, int]]:
+        """Follow-up questions: SRV/TXT for unresolved instances, A for unresolved hosts.
+
+        A browse answer may carry only the PTR record (the CFX5 does this after a while);
+        DNS-SD then resolves the instance with SRV/TXT queries and the host with an A query.
+        """
+        questions: list[tuple[str, int]] = []
+        for instance in sorted(self.instances):
+            srv = self._lookup(self.srv, instance)
+            if srv is None:
+                questions += [(instance, 33), (instance, 16)]
+                continue
+            if self._lookup(self.txt, instance) is None:
+                questions.append((instance, 16))
+            _port, target = srv
+            if not self.addresses.get(target.lower()):
+                questions.append((target, 1))
+        return questions
+
     @staticmethod
     def _lookup(table: dict, name: str):
         if name in table:
@@ -295,13 +318,25 @@ def query_mdns(
         sock.settimeout(0.25)
         query = build_query(service, unicast_response=unicast)
         deadline = time.monotonic() + timeout
-        resend_at = time.monotonic() + timeout / 2
+        next_send = 0.0
+        asked: set[tuple[str, int]] = set()
         sock.sendto(query, (MDNS_GROUP, MDNS_PORT))
         while time.monotonic() < deadline:
-            if time.monotonic() >= resend_at:
-                resend_at = float("inf")
-                with contextlib.suppress(OSError):
-                    sock.sendto(query, (MDNS_GROUP, MDNS_PORT))
+            now = time.monotonic()
+            if now >= next_send:
+                # Resolve stage: ask for the SRV/TXT/A records the browse answer did not carry.
+                followups = [q for q in collector.missing() if q not in asked]
+                if followups:
+                    asked.update(followups)
+                    with contextlib.suppress(OSError):
+                        sock.sendto(
+                            build_query(unicast_response=unicast, questions=followups),
+                            (MDNS_GROUP, MDNS_PORT),
+                        )
+                elif not collector.instances:
+                    with contextlib.suppress(OSError):
+                        sock.sendto(query, (MDNS_GROUP, MDNS_PORT))  # browse again
+                next_send = now + max(0.4, timeout / 4)
             try:
                 data, _ = sock.recvfrom(9000)
             except TimeoutError:
@@ -309,6 +344,9 @@ def query_mdns(
             except OSError:
                 break
             collector.add(data)
+            if collector.instances and not collector.missing():
+                # everything resolved: give stragglers a moment, then stop early
+                deadline = min(deadline, time.monotonic() + 0.3)
     finally:
         sock.close()
     return collector.services()

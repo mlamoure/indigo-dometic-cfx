@@ -230,9 +230,17 @@ class Plugin(indigo.PluginBase):
         self._run_discovery()
         return values_dict
 
+    def _known_hosts(self) -> list[str]:
+        with self._lock:
+            hosts = [
+                link.config.host for link in self._links.values() if link.config.host
+            ]
+        return sorted(set(hosts))
+
     def _run_discovery(self) -> list[Discovered]:
         try:
-            found = discover(timeout=3.0)
+            # mDNS browse + DDMD broadcast, plus a direct probe of every configured address
+            found = discover(timeout=3.0, hosts=self._known_hosts())
         except OSError as exc:
             self.logger.warning(f"discovery failed: {exc}")
             found = []
