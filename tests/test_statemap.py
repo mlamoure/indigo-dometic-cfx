@@ -56,7 +56,7 @@ def test_states_in_fahrenheit_from_live_capture():
 
 def test_states_in_celsius_and_off_mode():
     st = _state()
-    st.compartments[0].powered = False
+    st.cooler_on = False  # the master switch drives the thermostat mode
     st.error_codes = (23, 16)
     st.power_source = 7
     states = to_indigo_states(st, compartment=0, unit="C", connected=True)
@@ -75,7 +75,8 @@ def test_unknown_state_and_missing_compartment():
         "connected": StateValue(False)
     }
     states = to_indigo_states(_state(), compartment=1, unit="F", connected=True)
-    assert "temperatureInput1" not in states and "hvacOperationMode" not in states
+    assert "temperatureInput1" not in states  # no second compartment on this unit
+    assert states["hvacOperationMode"].value == HVAC_COOL  # master switch is per cooler
     assert states["voltage"].value == 13.5
 
 

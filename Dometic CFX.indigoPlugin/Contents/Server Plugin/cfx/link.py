@@ -48,7 +48,7 @@ class SetSetpoint:
 
 
 @dataclass(frozen=True)
-class SetPower:  # the thermostat mode: compartment power (HVAC_POWER_TOPIC)
+class SetPower:  # the thermostat mode (HVAC_POWER_TOPIC = the cooler's master switch)
     on: bool
 
 

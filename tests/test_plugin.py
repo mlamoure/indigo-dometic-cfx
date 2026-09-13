@@ -155,10 +155,12 @@ class TestActions:
             dev,
         )
         _tick(plugin)
+        _tick(plugin)
         assert plugin._factory.last.sent[-1].encode() == bytes.fromhex(
-            "11 03 00 00 1a 00 00 00 00"
+            "11 0b 00 00 1a 00 00 00 00"  # coolerpow (master switch) off
         )
         assert dev.states["hvacOperationMode"] == fake_indigo.kHvacMode.Off
+        assert dev.states["coolerPowerOn"] is False
         plugin.actionControlThermostat(
             thermostat_action(
                 fake_indigo.kThermostatAction.SetHvacMode,

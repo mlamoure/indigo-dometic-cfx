@@ -10,11 +10,11 @@ from typing import Any
 
 from ddmp.models import BatteryProtection, CoolerState, PowerSource
 
-#: Which topic the thermostat mode (Cool / Off) drives. ``cpow`` (compartment power) matches
-#: the community BLE climate mapping and makes a second-compartment device identical; switch
-#: to ``coolerpow`` if the supervised write test shows the front-panel button toggles the
-#: master topic instead.
-HVAC_POWER_TOPIC = "cpow"
+#: Which topic the thermostat mode (Cool / Off) drives. Verified 2026-09-13 on a CFX5 25:
+#: ``cpow`` (compartment power) is accepted but the compressor keeps running and the app still
+#: shows the cooler as on; ``coolerpow`` (the master switch) is what "off" means to the cooler
+#: and to Dometic's app. Compartment power stays visible as the ``compartmentPowerOn`` state.
+HVAC_POWER_TOPIC = "coolerpow"
 
 #: Marker values for the built-in ``hvacOperationMode`` state; plugin.py maps them to
 #: ``indigo.kHvacMode.Cool`` / ``indigo.kHvacMode.Off``.
