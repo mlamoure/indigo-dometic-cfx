@@ -160,7 +160,7 @@ def test_write_timeout_and_refusal():
     assert any("refused battery protection LOW (NAK)" in t for t in _texts(out))
 
 
-def test_power_job_uses_compartment_topic_and_request_status_resubscribes():
+def test_power_job_uses_master_switch_and_request_status_resubscribes():
     factory, clock = Factory(), Clock()
     link = _link(factory, clock)
     link.tick()
@@ -168,7 +168,9 @@ def test_power_job_uses_compartment_topic_and_request_status_resubscribes():
     link.request(RequestStatus())
     link.tick()
     sent = factory.last.sent
-    assert sent[0].encode() == bytes.fromhex("11 03 00 00 1a 00 00 00 00")
+    assert sent[0].encode() == bytes.fromhex(
+        "11 0b 00 00 1a 00 00 00 00"
+    )  # coolerpow off
     assert factory.last.subscribe_calls == 2
 
 
