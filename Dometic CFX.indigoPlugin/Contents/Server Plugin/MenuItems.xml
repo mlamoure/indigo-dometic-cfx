@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<MenuItems>
+    <MenuItem id="discoverCoolers">
+        <Name>Discover Coolers</Name>
+        <CallbackMethod>menu_discover_coolers</CallbackMethod>
+    </MenuItem>
+    <MenuItem id="toggleDebug">
+        <Name>Toggle Debug Logging</Name>
+        <CallbackMethod>menu_toggle_debug</CallbackMethod>
+    </MenuItem>
+</MenuItems>

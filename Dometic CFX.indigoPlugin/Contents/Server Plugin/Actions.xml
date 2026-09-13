@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<Actions>
+    <Action id="setBatteryProtection" deviceFilter="self.cfxCooler">
+        <Name>Set Battery Protection</Name>
+        <CallbackMethod>set_battery_protection</CallbackMethod>
+        <ConfigUI>
+            <Field id="level" type="menu" defaultValue="MEDIUM">
+                <Label>Level:</Label>
+                <List>
+                    <Option value="LOW">Low</Option>
+                    <Option value="MEDIUM">Medium</Option>
+                    <Option value="HIGH">High</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+    </Action>
+
+    <Action id="setCoolerPower" deviceFilter="self.cfxCooler">
+        <Name>Set Cooler Power</Name>
+        <CallbackMethod>set_cooler_power</CallbackMethod>
+        <ConfigUI>
+            <Field id="power" type="menu" defaultValue="on">
+                <Label>Cooler master power:</Label>
+                <List>
+                    <Option value="on">On</Option>
+                    <Option value="off">Off</Option>
+                </List>
+            </Field>
+        </ConfigUI>
+    </Action>
+
+    <Action id="requestStatus" deviceFilter="self.cfxCooler">
+        <Name>Request Status</Name>
+        <CallbackMethod>request_status</CallbackMethod>
+    </Action>
+</Actions>

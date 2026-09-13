@@ -1,0 +1,6 @@
+# Development / test dependencies. The plugin bundle is stdlib-only at runtime: the ddmp
+# library is vendored into "Dometic CFX.indigoPlugin/Contents/Server Plugin/ddmp/" by
+# scripts/sync_ddmp.sh and nothing is pip-installed on the Indigo server.
+pytest~=8.4
+black~=25.1
+ruff~=0.13
